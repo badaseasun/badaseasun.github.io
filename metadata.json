@@ -1,0 +1,6 @@
+{
+  "name": "다잡아트립 (DAJABA TRIP)",
+  "description": "2030 동행 여행 트러블 제로 솔루션 - 성향·예산 블라인드 조율, 국내외 사계절 추천, AI 일정 & 지도 연동, 현장 SOS 물리 룰렛 중재",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

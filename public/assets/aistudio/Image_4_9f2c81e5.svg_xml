@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fdfbf7"/>
+      <stop offset="100%" stop-color="#f1f8f3"/>
+    </linearGradient>
+    <linearGradient id="palmGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f87171"/>
+      <stop offset="100%" stop-color="#ea580c"/>
+    </linearGradient>
+    <linearGradient id="waveGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34d399"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Outline Outer Badge with Rounded Arch (from Image 2 style) -->
+  <path d="M 20 86 L 20 42 A 30 30 0 0 1 80 42 L 80 86 A 8 8 0 0 1 72 94 L 28 94 A 8 8 0 0 1 20 86 Z" 
+        fill="url(#bgGrad)" 
+        stroke="#fca5a5" 
+        stroke-width="4.5" 
+        stroke-linejoin="round"/>
+
+  <!-- Warm Glowing Sun -->
+  <circle cx="62" cy="36" r="10" fill="#f87171" opacity="0.9"/>
+  <!-- Sun Rays -->
+  <path d="M 62 20 L 62 24 M 62 48 L 62 52 M 46 36 L 50 36 M 74 36 L 78 36 M 51 25 L 54 28 M 70 44 L 73 47 M 51 47 L 54 44 M 70 28 L 73 25" 
+        stroke="#f87171" 
+        stroke-width="3" 
+        stroke-linecap="round"/>
+
+  <!-- Palm Tree Trunk & Leaves -->
+  <path d="M 37 84 Q 38 64 42 52" fill="none" stroke="#ea580c" stroke-width="4" stroke-linecap="round"/>
+  <!-- Palm Fronds -->
+  <path d="M 42 52 C 34 50 24 55 23 60 C 29 59 36 57 42 54" fill="#f87171"/>
+  <path d="M 42 52 C 32 44 26 40 25 34 C 33 39 39 45 42 51" fill="#ea580c"/>
+  <path d="M 42 52 C 45 42 52 35 59 34 C 55 42 49 48 42 52" fill="#f87171"/>
+  <path d="M 42 52 C 48 50 56 54 58 59 C 52 57 46 56 42 53" fill="#ea580c"/>
+
+  <!-- Ocean Waves (Emerald / Teal) -->
+  <path d="M 21 78 C 30 75 36 82 46 80 C 56 78 64 71 79 73 L 79 86 A 8 8 0 0 1 72 93 L 28 93 A 8 8 0 0 1 21 86 Z" 
+        fill="url(#waveGrad)" 
+        opacity="0.9"/>
+  <path d="M 21 78 C 30 75 36 82 46 80 C 56 78 64 71 79 73" 
+        fill="none" 
+        stroke="#047857" 
+        stroke-width="3.5" 
+        stroke-linecap="round"/>
+
+  <!-- Cute Little Airplane Sparkle (Traveling Vibe from Image 1) -->
+  <g transform="translate(62, 58) rotate(-15) scale(0.65)">
+    <path d="M 12 2 C 14 2 16 4 15 8 L 13 14 L 22 17 C 24 17 25 19 24 20 C 23 21 21 21 19 20 L 12 17 L 10 24 L 13 26 C 14 26 14 27 13 28 C 12 29 11 28 10 27 L 8 27 L 6 28 C 5 29 4 28 5 27 C 6 26 6 26 7 26 L 8 24 L 6 17 L 1 18 C -1 18 -1 16 0 15 L 7 13 L 7 7 C 7 3 10 2 12 2 Z" fill="#ffffff" stroke="#065f46" stroke-width="1.5" stroke-linejoin="round"/>
+  </g>
+</svg>
