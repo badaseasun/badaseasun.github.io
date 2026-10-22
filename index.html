@@ -2,11 +2,14 @@
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Remix 다잡아트립 (DAJABA TRIP)</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    />
+    <title>Remix 다잡아트립 (DAJABA TRIP) - 2030 동행 여행 트러블 제로 솔루션</title>
     <meta
       name="description"
-      content="2030 동행 여행 트러블 제로 솔루션 - 성향·예산 블라인드 조율, 국내외 사계절 추천, AI 일정 &amp; 지도 연동, 현장 SOS 갈등 룰렛 중재"
+      content="2030 동행 여행 트러블 제로 솔루션 - 성향·예산 블라인드 조율, 국내외 사계절 추천, 동선 중복 0% AI 일정 & 지도 연동, 현장 SOS 물리 룰렛 중재, TAGO 실시간 대중교통 및 모바일 앱 네이티브 연동"
     />
     <meta property="og:title" content="Remix 다잡아트립 (DAJABA TRIP)" />
     <meta
@@ -15,11 +18,17 @@
     />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#10b981" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="mobile-web-app-capable" content="yes" />
 
     <!-- External icon & font -->
     <link
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
     />
     <link
       rel="stylesheet"
@@ -27,9 +36,188 @@
       crossorigin
       href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
     />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Mobile App Native Bridge & Hardware Integration API (Android WebView / iOS WKWebView / React Native / Web) -->
+    <script>
+      (function() {
+        window.DajabaBridge = {
+          isNative: !!(
+            window.AndroidBridge ||
+            (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.DajabaBridge) ||
+            window.ReactNativeWebView
+          ),
+          platform: (function() {
+            if (window.AndroidBridge) return 'android';
+            if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.DajabaBridge) return 'ios';
+            if (window.ReactNativeWebView) return 'react-native';
+            return 'web';
+          })(),
+
+          // Post messages to host native application
+          postMessage: function(action, payload) {
+            var msg = JSON.stringify({ action: action, payload: payload, timestamp: Date.now() });
+            console.log('[DajabaBridge >> Native]', action, payload);
+
+            try {
+              if (window.AndroidBridge && typeof window.AndroidBridge.postMessage === 'function') {
+                window.AndroidBridge.postMessage(msg);
+              } else if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.DajabaBridge) {
+                window.webkit.messageHandlers.DajabaBridge.postMessage(msg);
+              } else if (window.ReactNativeWebView && typeof window.ReactNativeWebView.postMessage === 'function') {
+                window.ReactNativeWebView.postMessage(msg);
+              } else {
+                window.dispatchEvent(new CustomEvent('dajaba-native-bridge-event', { detail: { action: action, payload: payload } }));
+              }
+            } catch (err) {
+              console.warn('Bridge postMessage error:', err);
+            }
+          },
+
+          // Hardware Haptic / Vibration
+          vibrate: function(ms) {
+            var duration = ms || 80;
+            if (typeof navigator !== 'undefined' && navigator.vibrate) {
+              try { navigator.vibrate(duration); } catch(e) {}
+            }
+            this.postMessage('vibrate', { duration: duration });
+          },
+
+          // Web Audio API Synthesizer (Instant haptic audio without external assets)
+          playSound: function(type) {
+            try {
+              var AudioCtx = window.AudioContext || window.webkitAudioContext;
+              if (!AudioCtx) return;
+              var ctx = new AudioCtx();
+              var soundType = type || 'click';
+
+              if (soundType === 'click') {
+                var osc = ctx.createOscillator();
+                var gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(850, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(320, ctx.currentTime + 0.06);
+                gain.gain.setValueAtTime(0.25, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.06);
+                osc.start(ctx.currentTime);
+                osc.stop(ctx.currentTime + 0.06);
+              } else if (soundType === 'fanfare') {
+                var tones = [523.25, 659.25, 783.99, 1046.50];
+                tones.forEach(function(freq, idx) {
+                  var subOsc = ctx.createOscillator();
+                  var subGain = ctx.createGain();
+                  subOsc.connect(subGain);
+                  subGain.connect(ctx.destination);
+                  subOsc.type = 'triangle';
+                  subOsc.frequency.value = freq;
+                  var start = ctx.currentTime + idx * 0.11;
+                  subGain.gain.setValueAtTime(0.28, start);
+                  subGain.gain.exponentialRampToValueAtTime(0.01, start + 0.32);
+                  subOsc.start(start);
+                  subOsc.stop(start + 0.32);
+                });
+              }
+            } catch (e) {
+              console.warn('AudioContext sound not supported or gesture needed:', e);
+            }
+          },
+
+          // Geolocation GPS
+          getCurrentLocation: function(callback, errorCallback) {
+            if (typeof navigator !== 'undefined' && navigator.geolocation) {
+              var self = this;
+              navigator.geolocation.getCurrentPosition(
+                function(pos) {
+                  var coords = { latitude: pos.coords.latitude, longitude: pos.coords.longitude };
+                  self.postMessage('location_updated', coords);
+                  if (callback) callback(coords);
+                },
+                function(err) {
+                  if (errorCallback) errorCallback(err);
+                },
+                { enableHighAccuracy: true, timeout: 6000 }
+              );
+            } else if (errorCallback) {
+              errorCallback(new Error('Geolocation not available'));
+            }
+          },
+
+          // Universal Deep Link Navigation (KakaoMap / Naver / Tmap / KakaoT / Google)
+          openMap: function(type, placeName, addr, lat, lng) {
+            this.vibrate(50);
+            var encName = encodeURIComponent(placeName || '');
+            var encAddr = encodeURIComponent(addr || '');
+            var query = encodeURIComponent((placeName + ' ' + (addr || '')).trim());
+
+            var appUrl = '';
+            var webUrl = '';
+
+            if (type === 'kakao') {
+              appUrl = (lat && lng) ? 'kakaomap://look?p=' + lat + ',' + lng : 'kakaomap://search?q=' + encName;
+              webUrl = 'https://map.kakao.com/link/search/' + (encName || encAddr);
+            } else if (type === 'naver') {
+              appUrl = (lat && lng)
+                ? 'nmap://place?lat=' + lat + '&lng=' + lng + '&name=' + encName + '&appname=com.dajabatrip.app'
+                : 'nmap://search?query=' + encName + '&appname=com.dajabatrip.app';
+              webUrl = 'https://map.naver.com/v5/search/' + (encName || encAddr);
+            } else if (type === 'tmap') {
+              appUrl = (lat && lng)
+                ? 'tmap://route?goalname=' + encName + '&goalx=' + lng + '&goaly=' + lat
+                : 'tmap://search?name=' + encName;
+              webUrl = 'https://tmap.co.kr/';
+            } else if (type === 'taxi') {
+              appUrl = (lat && lng)
+                ? 'kakaot://taxi?dest_lat=' + lat + '&dest_lng=' + lng
+                : 'kakaot://';
+              webUrl = 'https://www.kakaomobility.com/';
+            } else {
+              webUrl = 'https://www.google.com/maps/search/?api=1&query=' + query;
+            }
+
+            this.postMessage('map_opened', { type: type, placeName: placeName, addr: addr, lat: lat, lng: lng });
+
+            if (appUrl) {
+              var start = Date.now();
+              window.location.href = appUrl;
+              setTimeout(function() {
+                if (Date.now() - start < 1500 && webUrl) {
+                  window.open(webUrl, '_blank');
+                }
+              }, 800);
+            } else if (webUrl) {
+              window.open(webUrl, '_blank');
+            }
+          },
+
+          // Native / Web Share
+          share: function(title, text, url) {
+            this.postMessage('share', { title: title, text: text, url: url });
+            if (typeof navigator !== 'undefined' && navigator.share) {
+              return navigator.share({ title: title, text: text, url: url || window.location.href });
+            }
+            return Promise.reject(new Error('navigator.share not supported'));
+          }
+        };
+
+        // Listen for incoming messages from Host App (Android / iOS / React Native)
+        window.addEventListener('message', function(event) {
+          try {
+            var data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
+            if (data && data.action) {
+              console.log('[Native >> DajabaBridge]', data.action, data.payload);
+              window.dispatchEvent(new CustomEvent('dajaba-native-incoming', { detail: data }));
+            }
+          } catch(e) {}
+        });
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
